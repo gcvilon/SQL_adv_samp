@@ -36,12 +36,15 @@ FROM albums, tracks
 WHERE album_id = albums.id
 GROUP BY albums.name;
 
-SELECT executors.name, albums.release
-FROM executors, albums, albumsexecutors
-WHERE executors.id = albumsexecutors.executor_id
-AND albums.id = albumsexecutors.album_id
-AND NOT albums.release = 2020
-GROUP BY executors.name, albums.release;
+SELECT name
+FROM executors
+WHERE name NOT IN (
+	SELECT executors.name
+	FROM executors
+	JOIN albumsexecutors ON executors.id = albumsexecutors.executor_id 
+	JOIN albums ON albums.id = albumsexecutors.album_id
+	WHERE albums.release = 2020
+);
 
 SELECT collections.name
 FROM collections, tracks, collectionstracks, albumsexecutors, executors
