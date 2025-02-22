@@ -18,7 +18,7 @@ WHERE name NOT LIKE '% %';
 
 SELECT name
 FROM tracks
-WHERE (LOWER(name) LIKE '%мой%') OR (LOWER(name) LIKE '%my%');
+WHERE string_to_array(LOWER(name), ' ') && ARRAY ['my', 'мой'];
 
 --Задание 3
 SELECT name, COUNT (genre_id)
@@ -36,12 +36,12 @@ FROM albums, tracks
 WHERE album_id = albums.id
 GROUP BY albums.name;
 
-SELECT executors.name
+SELECT executors.name, albums.release
 FROM executors, albums, albumsexecutors
 WHERE executors.id = albumsexecutors.executor_id
 AND albums.id = albumsexecutors.album_id
 AND NOT albums.release = 2020
-GROUP BY executors."name";
+GROUP BY executors.name, albums.release;
 
 SELECT collections.name
 FROM collections, tracks, collectionstracks, albumsexecutors, executors
